@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.card-img--height {
+  height: 180px;
+  object-fit: cover;
+}
+
+.form-control {
+  margin-bottom: 20px;
+}
+
+.btn-group {
+  margin: 0 auto;
+}
