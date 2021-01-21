@@ -1,33 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import { API_URL, API_KEY_3 } from "../../api/api";
+import React from 'react';
 import MovieItem from "../MoviesItem";
-import * as queryString from "querystring";
 
-
-const MovieList = ({filters, currentPage}) => {
-    const [movies, setMovies] = useState([]);
-    const queryStringParams = {
-        api_key: API_KEY_3,
-        language: 'ru-RU',
-        sort_by: filters.sort_by,
-        page: currentPage,
-        primary_release_year: filters.primary_release_year
-    }
-    const link = `${API_URL}/discover/movie?${queryString.stringify(queryStringParams)}`;
-
-    useEffect(() => {
-        fetch(link)
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                setMovies(data.results)
-            });
-    }, [filters.sort_by, currentPage, filters.primary_release_year])
-
+const MovieList = ({moviesData, isLoading}) => {
     return (
         <div className="row">
-            {movies.map(movie => {
+            {!isLoading && moviesData && moviesData.results.map(movie => {
                 return (
                     <div key={movie.id} className="col-6 mb-4">
                         <MovieItem item={movie} />

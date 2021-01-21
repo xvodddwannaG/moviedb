@@ -12,6 +12,7 @@ const Pagination = ({currentPage, onChangeCurrentPage, totalPage}) => {
             <button
                 type="button"
                 className="btn btn-primary"
+                disabled={currentPage === totalPage}
                 onClick={onChangeCurrentPage.bind(null, currentPage + 1)}
             >Вперед</button>
             <div>{currentPage} of {totalPage}</div>

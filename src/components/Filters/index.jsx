@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from "../Select";
 import Pagination from "../Pagination";
+import Genres from "../Genres/index.jsx";
 
 const optionsSortBy = [
     {
@@ -39,7 +40,8 @@ const optionsPrimaryReleaseYear = [
     },
 ]
 
-const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrentPage}) => {
+const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrentPage, totalPages, resetFiltersHandler}) => {
+    console.log('render')
     return (
         <form className="mb-3">
             <div className="form-group">
@@ -51,7 +53,8 @@ const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrent
                     onChangeSelectorHandler={onChangeSelectorHandler}
                     filter={filters.primary_release_year}
                     options={optionsPrimaryReleaseYear} />
-                <Pagination currentPage={currentPage} onChangeCurrentPage={onChangeCurrentPage}/>
+                <Pagination currentPage={currentPage} onChangeCurrentPage={onChangeCurrentPage} totalPage={totalPages}/>
+                <Genres name='with_genres' onChangeSelectorHandler={onChangeSelectorHandler} resetFiltersHandler={resetFiltersHandler} filters={filters}/>
             </div>
         </form>
     );

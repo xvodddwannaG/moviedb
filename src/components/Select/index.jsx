@@ -5,7 +5,7 @@ const Select = ({filter, onChangeSelectorHandler, options, name}) => {
         <select
             className="form-control"
             value={filter}
-            onChange={onChangeSelectorHandler}
+            onChange={(e) => onChangeSelectorHandler(e.target.name, e.target.value)}
             id={name}
             name={name}
         >
