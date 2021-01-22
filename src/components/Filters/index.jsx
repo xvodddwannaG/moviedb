@@ -41,7 +41,6 @@ const optionsPrimaryReleaseYear = [
 ]
 
 const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrentPage, totalPages, resetFiltersHandler}) => {
-    console.log('render')
     return (
         <form className="mb-3">
             <div className="form-group">
@@ -53,8 +52,8 @@ const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrent
                     onChangeSelectorHandler={onChangeSelectorHandler}
                     filter={filters.primary_release_year}
                     options={optionsPrimaryReleaseYear} />
-                <Pagination currentPage={currentPage} onChangeCurrentPage={onChangeCurrentPage} totalPage={totalPages}/>
                 <Genres name='with_genres' onChangeSelectorHandler={onChangeSelectorHandler} resetFiltersHandler={resetFiltersHandler} filters={filters}/>
+                <Pagination currentPage={currentPage} onChangeCurrentPage={onChangeCurrentPage} totalPage={totalPages}/>
             </div>
         </form>
     );

@@ -24,3 +24,7 @@ code {
 .btn-group {
   margin: 0 auto;
 }
+
+.invalid-feedback {
+  display: block!important;
+}
