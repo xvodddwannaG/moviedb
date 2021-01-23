@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Filters from "./Filters";
 import MoviesList from "./MovieList";
+import Cookies from 'universal-cookie';
 import {API_KEY_3, API_URL, PASS} from "../api/api";
 import {useData} from "../api/useData";
 import Header from "./Header";
@@ -11,11 +12,25 @@ const initialFiltersState = {
     with_genres: []
 }
 
+const cookies = new Cookies();
+
+const ONE_WEEK_COOKIES_TIME = 604800;
+
 const App = () => {
     const [filters, setFilters] = useState(initialFiltersState)
     const [currentPage, setCurrentPage] = useState(1);
-    const [sessionId, setSessionId] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const [sessionId, setSessionId] = useState(null);
+
+    useEffect(() => {
+        // вынести в отдельную функцию
+        const session_id = cookies.get("session_id")
+        if (session_id) {
+            fetch(`${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`)
+                .then((res) => res.json()).then((res) => setUserData(res));
+        }
+    }, [])
 
     const queryStringParams = {
         api_key: API_KEY_3,
@@ -43,41 +58,15 @@ const App = () => {
 
     const resetFiltersHandler = () => setFilters(initialFiltersState);
 
-    const getSession = async () => {
-        try {
-            const {request_token} = await fetch(`${API_URL}/authentication/token/new?api_key=${API_KEY_3}`).then((res) => res.json());
-            const result = await fetch(`${API_URL}/authentication/token/validate_with_login?api_key=${API_KEY_3}`, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: 'xvoddd',
-                    password: PASS,
-                    request_token: request_token,
-                })
-            }).then((res) => res.json());
-            const {session_id} = await fetch(`https://api.themoviedb.org/3/authentication/session/new?api_key=${API_KEY_3}`, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    request_token: result.request_token
-                })
-            }).then((res) => res.json())
-            await setSessionId(session_id);
-            await setIsSuccess(true)
-        } catch (e) {
-            console.log(e)
-        }
-    }
+    const updateUserData = (user, session_id) => {
+        setUserData(user)
+        setSessionId(session_id)
+        cookies.set("session_id", session_id, {path: '/', maxAge: ONE_WEEK_COOKIES_TIME})
+    };
 
     return (
         <>
-            <Header getSession={getSession}/>
+            <Header userData={userData} updateUserData={updateUserData}/>
             <div className="container">
                 <div className="row mt-4">
                     <div className="col-4">

@@ -27,8 +27,10 @@ export const getSession = async (username, password) => {
             body: JSON.stringify({
                 request_token: result.request_token
             })
-        }).then((res) => res.json()).then((res) => data = res);
-        return data
+        }).then((res) => res.json());
+        const userData = await fetch(`${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`)
+            .then((res) => res.json()).then((res) => data = res)
+        return {...data, session_id: session_id};
     } catch (e) {
         return error = e
     }

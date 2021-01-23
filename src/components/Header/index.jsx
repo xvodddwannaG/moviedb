@@ -1,7 +1,8 @@
 import React from 'react';
 import Login from "../Login";
+import User from "../User";
 
-const Header = ({getSession}) => {
+const Header = ({updateUserData, userData}) => {
     return (
         <div>
             <nav className="navbar navbar-dark bg-primary">
@@ -11,7 +12,7 @@ const Header = ({getSession}) => {
                             <a href='#' className="nav-link">Home</a>
                         </li>
                     </ul>
-                    <Login getSession={getSession}/>
+                    {userData ? <User userData={userData}/> : <Login updateUserData={updateUserData}/>}
                 </div>
             </nav>
         </div>

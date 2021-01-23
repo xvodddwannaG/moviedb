@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
+import classNames from 'classnames';
 import {getSession} from "../../api/useLogin";
 
-const LoginForm = () => {
+const LoginForm = ({updateUserData}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false)
 
@@ -22,6 +24,14 @@ const LoginForm = () => {
         setUsername(e.target.value)
     };
 
+    const onRepeatPasswordChangeHandler = (e) => {
+        if (Object.keys(errors).length > 0) {
+            setErrors({})
+            setIsSubmit(true)
+        }
+        setRepeatPassword(e.target.value)
+    };
+
     const onSubmit = (e) => {
         e.preventDefault()
         validateFields()
@@ -29,29 +39,47 @@ const LoginForm = () => {
             setIsSubmit(false)
             getSession(username, password)
                 .then((res) => {
-                    if (res.success === true) {
-                        console.log(res)
-                    } else {
-                        setIsSubmit(false)
+                    if (res.success === false) {
                         setErrors({...errors, base: res.status_message})
+                        setIsSubmit(false)
+                    } else {
+                        updateUserData(res, res.session_id)
                     }
                 })
             setIsSubmit(true)
         }
     }
 
-    const validateFields = () => {
-        if (username === '') {
-            setIsSubmit(false)
-            setErrors({...errors, username: 'Not Empty'})
+    const validateFields = (name) => {
+        let newErrors = {...errors};
+
+        if (username === '' && name === 'username') {
+            setIsSubmit(false);
+            newErrors = {...newErrors, username: 'Not Empty'}
+            setErrors({...newErrors})
+        }
+
+        if (password.length < 5 && name === 'password') {
+            setIsSubmit(false);
+            newErrors = {...newErrors, password: 'Required! Must be 5 characters or more'}
+            setErrors({...newErrors})
+        }
+
+        if (repeatPassword !== password && name === 'repeatPassword') {
+            setIsSubmit(false);
+            newErrors = {...newErrors, repeatPassword: 'Repeat password is not equal to password'}
+            setErrors({...newErrors})
+        }
+
+        if (Object.keys(newErrors).length === 0 && name === 'repeatPassword') {
+            setIsSubmit(true);
         }
     }
 
-    const onBlurHandler = () => {
-        validateFields()
-    }
 
-    console.log(!isSubmit && username === '')
+    const onBlurHandler = (e) => {
+        validateFields(e.target.name)
+    }
 
     return (
         <div className="form-login-container">
@@ -63,7 +91,9 @@ const LoginForm = () => {
                     <label htmlFor="username">Пользователь</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={classNames('form-control', {
+                            'is-invalid': errors.username
+                        })}
                         id="username"
                         placeholder="Пользователь"
                         name="username"
@@ -79,7 +109,9 @@ const LoginForm = () => {
                     <label htmlFor="password">Пароль</label>
                     <input
                         type="password"
-                        className="form-control"
+                        className={classNames('form-control', {
+                            'is-invalid': errors.password
+                        })}
                         id="password"
                         placeholder="Пароль"
                         name="password"
@@ -91,11 +123,29 @@ const LoginForm = () => {
                         <div className="invalid-feedback">{errors.password}</div>
                     )}
                 </div>
+                <div className="form-group">
+                    <label htmlFor="repeat-password">Повторите пароль</label>
+                    <input
+                        type="password"
+                        className={classNames('form-control', {
+                            'is-invalid': errors.repeatPassword
+                        })}
+                        id="repeat-password"
+                        placeholder="Пароль"
+                        name="repeatPassword"
+                        value={repeatPassword}
+                        onChange={onRepeatPasswordChangeHandler}
+                        onBlur={onBlurHandler}
+                    />
+                    {errors.repeatPassword && (
+                        <div className="invalid-feedback">{errors.repeatPassword}</div>
+                    )}
+                </div>
                 <button
                     type="submit"
                     className="btn btn-lg btn-primary btn-block"
                     onClick={onSubmit}
-                    disabled={!isSubmit && username === ''}
+                    disabled={!isSubmit}
                 >
                     Вход
                 </button>
