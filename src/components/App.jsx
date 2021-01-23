@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import Filters from "./Filters";
 import MoviesList from "./MovieList";
 import Cookies from 'universal-cookie';
-import {API_KEY_3, API_URL, PASS} from "../api/api";
+import {API_KEY_3, API_URL} from "../api/api";
 import {useData} from "../api/useData";
 import Header from "./Header";
 
