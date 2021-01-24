@@ -78,7 +78,7 @@ const App = () => {
             </AppContext.Provider>
             <div className="container">
                 <div className="row mt-4">
-                    <div className="col-4">
+                    <div className="col-3">
                         <div className="card" style={{width: "100%"}}>
                             <div className="card-body">
                                 <h3>Фильтры:</h3>
@@ -93,7 +93,7 @@ const App = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-8">
+                    <div className="col-9">
                         <MoviesList moviesData={data} isLoading={isLoading}/>
                     </div>
                 </div>
