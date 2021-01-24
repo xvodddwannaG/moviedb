@@ -1,4 +1,5 @@
 import React from 'react';
+import { Star, StarBorder, Bookmark, BookmarkBorder } from '@material-ui/icons';
 
 const MoviesItem = ({item}) => {
     const imagePath = item.poster_path || item.backdrop_path
@@ -17,6 +18,10 @@ const MoviesItem = ({item}) => {
                 <div className="card-movie__description">
                     <div className="card-movie__icons">
                         <div className="card-text">Рейтинг: {item.vote_average}</div>
+                        <div>
+                            <Star className='icons'/>
+                            <Bookmark/>
+                        </div>
                     </div>
                     <a className='card-title card-movie__name' href='#'>{item.title}</a>
                     <div className="card-movie__details">
