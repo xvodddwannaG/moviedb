@@ -23,15 +23,6 @@ const Genres = ({onChangeSelectorHandler, name, resetFiltersHandler, filters:{wi
 
     return (
         <>
-            <div>
-                <button
-                    type="button"
-                    className="btn btn-outline-dark mb-2"
-                    onClick={resetFiltersHandler}
-                >
-                    Сбросить все фильтры
-                </button>
-            </div>
             {genresList.map(genre => (
                 <div key={genre.id} className="form-check">
                     <input

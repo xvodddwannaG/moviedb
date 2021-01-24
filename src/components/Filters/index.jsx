@@ -44,6 +44,13 @@ const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrent
     return (
         <form className="mb-3">
             <div className="form-group">
+                <button
+                    type="button"
+                    className="btn clear-btn"
+                    onClick={resetFiltersHandler}
+                >
+                    Сбросить все фильтры
+                </button>
                 <label htmlFor="sort_by">Сортировать по:</label>
                 <Select name='sort_by' onChangeSelectorHandler={onChangeSelectorHandler} filter={filters.sort_by} options={optionsSortBy}/>
                 <label htmlFor="primary_release_year">Год релиза:</label>
