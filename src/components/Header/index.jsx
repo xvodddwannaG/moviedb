@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Login from "../Login";
-import User from "../User";
+import {AppContext} from '../App';
+import UserMenu from "../UserMenu";
 
-const Header = ({updateUserData, userData}) => {
+const Header = () => {
+    const {userData} = useContext(AppContext);
     return (
         <div>
             <nav className="navbar navbar-dark bg-primary">
@@ -12,7 +14,7 @@ const Header = ({updateUserData, userData}) => {
                             <a href='#' className="nav-link">Home</a>
                         </li>
                     </ul>
-                    {userData ? <User userData={userData}/> : <Login updateUserData={updateUserData}/>}
+                    {userData ? <UserMenu/> : <Login/>}
                 </div>
             </nav>
         </div>

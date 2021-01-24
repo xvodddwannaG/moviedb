@@ -1,13 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import classNames from 'classnames';
 import {getSession} from "../../api/useLogin";
+import {AppContext} from "../App";
 
-const LoginForm = ({updateUserData}) => {
+const LoginForm = () => {
+    const {updateUserData} = useContext(AppContext)
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false)
+
+    // const [{user, isLoading, isError, sessionId}, doFetch] = useDataApi()
 
     const onPasswordChangeHandler = (e) => {
         if (Object.keys(errors).length > 0) {
@@ -31,21 +36,28 @@ const LoginForm = ({updateUserData}) => {
         }
         setRepeatPassword(e.target.value)
     };
-
     const onSubmit = (e) => {
         e.preventDefault()
         validateFields()
         if (Object.keys(errors).length === 0) {
             setIsSubmit(false)
+            // doFetch({username: username,password: password});
+            // if (!isError) {
+            //     updateUserData(user, sessionId)
+            // } else {
+            //     setErrors({...errors, base: 'Incorrect login or password'});
+            //     setIsSubmit(false)
+            // }
             getSession(username, password)
                 .then((res) => {
                     if (res.success === false) {
-                        setErrors({...errors, base: res.status_message})
+                        setErrors({...errors, base: 'Incorrect login or password'})
                         setIsSubmit(false)
                     } else {
                         updateUserData(res, res.session_id)
                     }
                 })
+            // updateUserData(username, password)
             setIsSubmit(true)
         }
     }
