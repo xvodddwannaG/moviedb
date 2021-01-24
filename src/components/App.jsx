@@ -12,8 +12,8 @@ const initialFiltersState = {
     with_genres: []
 }
 
+export const AppContext = React.createContext();
 const cookies = new Cookies();
-
 const ONE_WEEK_COOKIES_TIME = 604800;
 
 const App = () => {
@@ -29,8 +29,11 @@ const App = () => {
         if (session_id) {
             fetch(`${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`)
                 .then((res) => res.json()).then((res) => setUserData(res));
+            setSessionId(session_id);
         }
     }, [])
+
+
 
     const queryStringParams = {
         api_key: API_KEY_3,
@@ -40,7 +43,6 @@ const App = () => {
         primary_release_year: filters.primary_release_year,
         with_genres: filters.with_genres.join(),
     }
-
     const {data, isLoading, isError} = useData(queryStringParams)
 
     const onChangeSelectorHandler = (name, value) => {
@@ -61,12 +63,19 @@ const App = () => {
     const updateUserData = (user, session_id) => {
         setUserData(user)
         setSessionId(session_id)
-        cookies.set("session_id", session_id, {path: '/', maxAge: ONE_WEEK_COOKIES_TIME})
+
+        if (session_id === null) {
+            cookies.remove("session_id")
+        } else  {
+            cookies.set("session_id", session_id, {path: '/', maxAge: ONE_WEEK_COOKIES_TIME})
+        }
     };
 
     return (
         <>
-            <Header userData={userData} updateUserData={updateUserData}/>
+            <AppContext.Provider value={{userData, sessionId, updateUserData}}>
+                <Header/>
+            </AppContext.Provider>
             <div className="container">
                 <div className="row mt-4">
                     <div className="col-4">
