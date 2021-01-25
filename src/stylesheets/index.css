@@ -54,6 +54,7 @@ code {
 .card-movie__icons {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .card-movie__name {
@@ -103,3 +104,8 @@ code {
   color: deepskyblue!important;
 }
 
+/* icons */
+
+.icons {
+  margin-right: 10px;
+}
