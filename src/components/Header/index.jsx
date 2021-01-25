@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import Login from "../Login";
 import {AppContext} from '../App';
 import UserMenu from "../UserMenu";
+import {Link} from "react-router-dom";
 
 const Header = () => {
     const {userData} = useContext(AppContext);
@@ -11,7 +12,7 @@ const Header = () => {
                 <div className="container">
                     <ul className="navbar-nav">
                         <li className="nav-item active">
-                            <a href='#' className="nav-link">Home</a>
+                            <Link to='/' className="nav-link">Home</Link>
                         </li>
                     </ul>
                     {userData ? <UserMenu/> : <Login/>}

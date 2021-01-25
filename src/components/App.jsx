@@ -1,25 +1,16 @@
 import React, {useState, useEffect} from "react";
-import Filters from "./Filters";
-import MoviesList from "./MovieList";
 import Cookies from 'universal-cookie';
 import {API_KEY_3, API_URL} from "../api/api";
-import {useData} from "../api/useData";
 import Header from "./Header";
-
-const initialFiltersState = {
-    sort_by: 'popularity.desc',
-    primary_release_year: '2020',
-    with_genres: []
-}
+import MoviesPage from "../pages/MoviesPage";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import MoviePage from "../pages/MoviePage";
 
 export const AppContext = React.createContext();
 const cookies = new Cookies();
 const ONE_WEEK_COOKIES_TIME = 604800;
 
 const App = () => {
-    const [filters, setFilters] = useState(initialFiltersState)
-    const [currentPage, setCurrentPage] = useState(1);
-    const [isSuccess, setIsSuccess] = useState(false);
     const [userData, setUserData] = useState(null);
     const [sessionId, setSessionId] = useState(null);
 
@@ -33,33 +24,6 @@ const App = () => {
         }
     }, [])
 
-
-
-    const queryStringParams = {
-        api_key: API_KEY_3,
-        language: 'ru-RU',
-        sort_by: filters.sort_by,
-        page: currentPage,
-        primary_release_year: filters.primary_release_year,
-        with_genres: filters.with_genres.join(),
-    }
-    const {data, isLoading, isError} = useData(queryStringParams)
-
-    const onChangeSelectorHandler = (name, value) => {
-        setFilters({
-            ...filters,
-            [name]: value,
-        });
-
-        setCurrentPage(1)
-    }
-
-    const onChangeCurrentPage = newPageNumber => {
-        setCurrentPage(newPageNumber)
-    }
-
-    const resetFiltersHandler = () => setFilters(initialFiltersState);
-
     const updateUserData = (user, session_id) => {
         setUserData(user)
         setSessionId(session_id)
@@ -72,33 +36,15 @@ const App = () => {
     };
 
     return (
-        <>
+        <BrowserRouter>
             <AppContext.Provider value={{userData, sessionId, updateUserData}}>
                 <Header/>
             </AppContext.Provider>
-            <div className="container">
-                <div className="row mt-4">
-                    <div className="col-3">
-                        <div className="card" style={{width: "100%"}}>
-                            <div className="card-body">
-                                <h3>Фильтры:</h3>
-                                <Filters
-                                    onChangeSelectorHandler={onChangeSelectorHandler}
-                                    filters={filters}
-                                    currentPage={currentPage}
-                                    onChangeCurrentPage={onChangeCurrentPage}
-                                    totalPages={data.total_pages}
-                                    resetFiltersHandler={resetFiltersHandler}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-9">
-                        <MoviesList moviesData={data} isLoading={isLoading}/>
-                    </div>
-                </div>
-            </div>
-        </>
+            <Route path='/' exact component={MoviesPage}/>
+            <Switch>
+                <Route path='/movie/:id' component={MoviePage}/>
+            </Switch>
+        </BrowserRouter>
     );
 };
 
