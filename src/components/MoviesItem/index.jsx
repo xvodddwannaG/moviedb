@@ -1,5 +1,6 @@
 import React from 'react';
 import { Star, StarBorder, Bookmark, BookmarkBorder } from '@material-ui/icons';
+import {Link} from "react-router-dom";
 
 const MoviesItem = ({item}) => {
     const imagePath = item.poster_path || item.backdrop_path
@@ -25,7 +26,7 @@ const MoviesItem = ({item}) => {
                     </div>
                     <a className='card-title card-movie__name' href='#'>{item.title}</a>
                     <div className="card-movie__details">
-                        <a href='#'>Подробнее</a>
+                        <Link to={`/movie/${item.id}/details`}>Подробнее</Link>
                     </div>
                 </div>
             </div>
@@ -34,3 +35,5 @@ const MoviesItem = ({item}) => {
 };
 
 export default MoviesItem;
+
+
