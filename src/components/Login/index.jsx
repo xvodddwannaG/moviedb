@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Modal, ModalBody } from 'reactstrap';
+import {Modal, ModalBody} from 'reactstrap';
 import LoginForm from "../LoginForm";
 
 const Login = () => {
@@ -20,7 +20,7 @@ const Login = () => {
             </button>
             <Modal isOpen={isShowModal} toggle={toggleModal}>
                 <ModalBody>
-                    <LoginForm />
+                    <LoginForm/>
                 </ModalBody>
             </Modal>
         </div>

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import Login from "../Login";
-import {AppContext} from '../App';
+import {AppContext} from '../../App';
 import UserMenu from "../UserMenu";
 import {Link} from "react-router-dom";
 

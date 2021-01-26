@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CallApi from "../../api/api_v2";
 import {useParams} from "react-router";
-import {Star, StarBorder, Bookmark, BookmarkBorder} from '@material-ui/icons';
 import {Nav, NavItem} from "reactstrap";
 import {NavLink, Route,} from "react-router-dom";
 import Details from "../../components/Details";
@@ -34,9 +33,7 @@ const MoviePage = () => {
                         <div className="col-6">
                             <h1>{movieData.title}</h1>
                             <div className="movie-overwiew__mark">
-                                {movieData.vote_average}
-                                <StarBorder/>
-                                <BookmarkBorder/>
+                                Рейтинг: {movieData.vote_average}
                             </div>
                             <p>{movieData.overview}</p>
                         </div>
@@ -49,15 +46,18 @@ const MoviePage = () => {
                         <div className="col-10">
                             <Nav tabs>
                                 <NavItem>
-                                        <NavLink className='nav-link' to={`/movie/${id}/details`} activeClassName='active-link'>Детали</NavLink>
+                                    <NavLink className='nav-link' to={`/movie/${id}/details`}
+                                             activeClassName='active-link'>Детали</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                        <NavLink className='nav-link' to={`/movie/${id}/videos`} activeClassName='active-link'>Видео</NavLink>
+                                    <NavLink className='nav-link' to={`/movie/${id}/videos`}
+                                             activeClassName='active-link'>Видео</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                        <NavLink className='nav-link' to={`/movie/${id}/credits`} activeClassName='active-link'>
-                                            Актеры
-                                        </NavLink>
+                                    <NavLink className='nav-link' to={`/movie/${id}/credits`}
+                                             activeClassName='active-link'>
+                                        Актеры
+                                    </NavLink>
                                 </NavItem>
                             </Nav>
                             <Route path='/movie/:id/details'><Details movieData={movieData}/></Route>

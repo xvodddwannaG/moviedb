@@ -23,7 +23,8 @@ const MoviesPage = () => {
         with_genres: filters.with_genres.join(),
     }
 
-    const {data, isLoading, isError} = useData(queryStringParams)
+    const {data, isLoading} = useData(queryStringParams)
+
 
     const onChangeSelectorHandler = (name, value) => {
         setFilters({

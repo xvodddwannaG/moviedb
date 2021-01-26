@@ -40,7 +40,14 @@ const optionsPrimaryReleaseYear = [
     },
 ]
 
-const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrentPage, totalPages, resetFiltersHandler}) => {
+const Filters = ({
+                     onChangeSelectorHandler,
+                     filters,
+                     currentPage,
+                     onChangeCurrentPage,
+                     totalPages,
+                     resetFiltersHandler
+                 }) => {
     return (
         <form className="mb-3">
             <div className="form-group">
@@ -52,14 +59,16 @@ const Filters = ({onChangeSelectorHandler, filters, currentPage, onChangeCurrent
                     Сбросить все фильтры
                 </button>
                 <label htmlFor="sort_by">Сортировать по:</label>
-                <Select name='sort_by' onChangeSelectorHandler={onChangeSelectorHandler} filter={filters.sort_by} options={optionsSortBy}/>
+                <Select name='sort_by' onChangeSelectorHandler={onChangeSelectorHandler} filter={filters.sort_by}
+                        options={optionsSortBy}/>
                 <label htmlFor="primary_release_year">Год релиза:</label>
                 <Select
                     name='primary_release_year'
                     onChangeSelectorHandler={onChangeSelectorHandler}
                     filter={filters.primary_release_year}
-                    options={optionsPrimaryReleaseYear} />
-                <Genres name='with_genres' onChangeSelectorHandler={onChangeSelectorHandler} resetFiltersHandler={resetFiltersHandler} filters={filters}/>
+                    options={optionsPrimaryReleaseYear}/>
+                <Genres name='with_genres' onChangeSelectorHandler={onChangeSelectorHandler}
+                        resetFiltersHandler={resetFiltersHandler} filters={filters}/>
                 <Pagination currentPage={currentPage} onChangeCurrentPage={onChangeCurrentPage} totalPage={totalPages}/>
             </div>
         </form>

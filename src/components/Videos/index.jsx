@@ -11,13 +11,17 @@ const Videos = () => {
         CallApi.get(`/movie/${id}/videos`).then((res) => setVideos(res.results));
     }, [])
 
+    console.log(videos.length !== 0)
+
     return (
         <TabContent>
             <div className="row">
                 {videos.map((video) => {
                     return (
                         <div className='col-6' key={video.id}>
-                            <iframe title='video' width='100%' height='260' src={`https://www.youtube.com/embed/${video.key}`} frameBorder='0' allowFullScreen></iframe>
+                            <iframe title='video' width='100%' height='260'
+                                    src={`https://www.youtube.com/embed/${video.key}`} frameBorder='0'
+                                    allowFullScreen></iframe>
                         </div>
                     )
                 })}
