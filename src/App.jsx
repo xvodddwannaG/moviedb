@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import Cookies from 'universal-cookie';
-import {API_KEY_3, API_URL} from "../api/api";
-import Header from "./Header";
-import MoviesPage from "../pages/MoviesPage";
+import {API_KEY_3, API_URL} from "./api/api";
+import Header from "./components/Header";
+import MoviesPage from "./pages/MoviesPage";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import MoviePage from "../pages/MoviePage";
+import MoviePage from "./pages/MoviePage";
 
 export const AppContext = React.createContext();
 const cookies = new Cookies();
@@ -15,7 +15,6 @@ const App = () => {
     const [sessionId, setSessionId] = useState(null);
 
     useEffect(() => {
-        // вынести в отдельную функцию
         const session_id = cookies.get("session_id")
         if (session_id) {
             fetch(`${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`)
@@ -30,7 +29,7 @@ const App = () => {
 
         if (session_id === null) {
             cookies.remove("session_id")
-        } else  {
+        } else {
             cookies.set("session_id", session_id, {path: '/', maxAge: ONE_WEEK_COOKIES_TIME})
         }
     };

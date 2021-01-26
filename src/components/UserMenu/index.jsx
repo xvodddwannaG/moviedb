@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {AppContext} from '../App';
+import {AppContext} from '../../App';
 import CallApi from "../../api/api_v2";
 
 const UserMenu = () => {
@@ -17,7 +17,6 @@ const UserMenu = () => {
                     session_id: sessionId
                 }
             })
-            .then((res) => {console.log(res)});
         updateUserData(null, null)
     }
 

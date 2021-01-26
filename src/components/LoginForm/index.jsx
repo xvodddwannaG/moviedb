@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react';
 import classNames from 'classnames';
 import {getSession} from "../../api/useLogin";
-import {AppContext} from "../App";
+import {AppContext} from "../../App";
 
 const LoginForm = () => {
     const {updateUserData} = useContext(AppContext)
@@ -11,8 +11,6 @@ const LoginForm = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false)
-
-    // const [{user, isLoading, isError, sessionId}, doFetch] = useDataApi()
 
     const onPasswordChangeHandler = (e) => {
         if (Object.keys(errors).length > 0) {
@@ -41,13 +39,6 @@ const LoginForm = () => {
         validateFields()
         if (Object.keys(errors).length === 0) {
             setIsSubmit(false)
-            // doFetch({username: username,password: password});
-            // if (!isError) {
-            //     updateUserData(user, sessionId)
-            // } else {
-            //     setErrors({...errors, base: 'Incorrect login or password'});
-            //     setIsSubmit(false)
-            // }
             getSession(username, password)
                 .then((res) => {
                     if (res.success === false) {
@@ -57,7 +48,6 @@ const LoginForm = () => {
                         updateUserData(res, res.session_id)
                     }
                 })
-            // updateUserData(username, password)
             setIsSubmit(true)
         }
     }
