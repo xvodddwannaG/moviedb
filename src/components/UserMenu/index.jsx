@@ -1,24 +1,17 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {AppContext} from '../../App';
-import CallApi from "../../api/api_v2";
+import {useSessionId, useUserData} from "../../redux/selectors";
+import {useDispatch} from "react-redux";
+import {userLogout} from "../../redux/applyMiddleware";
 
 const UserMenu = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const {userData, updateUserData, sessionId} = useContext(AppContext)
-
-    console.log(sessionId)
+    const userData = useUserData()
+    const sessionId = useSessionId()
+    const dispatch = useDispatch()
 
     const toggleHandler = () => setIsDropdownOpen(!isDropdownOpen)
-    const logoutHandler = () => {
-        CallApi.delete("/authentication/session",
-            {
-                body: {
-                    session_id: sessionId
-                }
-            })
-        updateUserData(null, null)
-    }
+    const logoutHandler = () => dispatch(userLogout(sessionId))
 
     return (
         <Dropdown nav isOpen={isDropdownOpen} toggle={toggleHandler}>
