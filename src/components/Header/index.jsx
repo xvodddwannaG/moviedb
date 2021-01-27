@@ -1,11 +1,11 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import Login from "../Login";
-import {AppContext} from '../../App';
 import UserMenu from "../UserMenu";
 import {Link} from "react-router-dom";
+import {useUserData} from "../../redux/selectors";
 
 const Header = () => {
-    const {userData} = useContext(AppContext);
+    const userData = useUserData()
     return (
         <div>
             <nav className="navbar navbar-dark bg-primary">
@@ -15,7 +15,7 @@ const Header = () => {
                             <Link to='/' className="nav-link">Home</Link>
                         </li>
                     </ul>
-                    {userData ? <UserMenu/> : <Login/>}
+                    {userData ? <UserMenu /> : <Login />}
                 </div>
             </nav>
         </div>

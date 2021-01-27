@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Modal, ModalBody} from 'reactstrap';
 import LoginForm from "../LoginForm";
 
-const Login = () => {
+const Login = ({updateUserData}) => {
     const [isShowModal, setIsShowModal] = useState(false);
 
     const toggleModal = () => {
@@ -20,7 +20,7 @@ const Login = () => {
             </button>
             <Modal isOpen={isShowModal} toggle={toggleModal}>
                 <ModalBody>
-                    <LoginForm/>
+                    <LoginForm updateUserData={updateUserData}/>
                 </ModalBody>
             </Modal>
         </div>

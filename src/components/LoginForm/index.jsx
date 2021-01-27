@@ -1,10 +1,10 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import classNames from 'classnames';
-import {getSession} from "../../api/useLogin";
-import {AppContext} from "../../App";
+import {useDispatch} from "react-redux";
+import {getUser} from "../../redux/applyMiddleware";
 
 const LoginForm = () => {
-    const {updateUserData} = useContext(AppContext)
+    const dispatch = useDispatch()
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -39,15 +39,7 @@ const LoginForm = () => {
         validateFields()
         if (Object.keys(errors).length === 0) {
             setIsSubmit(false)
-            getSession(username, password)
-                .then((res) => {
-                    if (res.success === false) {
-                        setErrors({...errors, base: 'Incorrect login or password'})
-                        setIsSubmit(false)
-                    } else {
-                        updateUserData(res, res.session_id)
-                    }
-                })
+            dispatch(getUser(username,password));
             setIsSubmit(true)
         }
     }
