@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {TabContent} from "reactstrap";
 import CallApi from "../../api/api_v2";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 
 const Credits = () => {
     const [credits, setCredits] = useState([]);
     const {id} = useParams()
 
     useEffect(() => {
-        CallApi.get(`/movie/${id}/credits`).then((res) => setCredits(res.cast));
+        CallApi.get(`/movie/${id}/credits`)
+            .then((res) => setCredits(res.cast));
     }, [])
 
     return (

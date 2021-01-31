@@ -1,150 +1,94 @@
-import React, {useState} from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import {useDispatch} from "react-redux";
 import {getUser} from "../../redux/applyMiddleware";
+import {yupResolver} from "@hookform/resolvers/yup"
+import {useErrorMessage} from "../../redux/selectors";
+import {useForm} from "react-hook-form";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+    username: yup.string().required().min(5),
+    password: yup.string().required().min(5),
+    repeatPassword: yup.string().required().oneOf([yup.ref('password'), null])
+})
 
 const LoginForm = () => {
+    const {register, handleSubmit, errors, formState: {isDirty, isValid, isSubmitting}} = useForm({
+        mode: "onBlur",
+        resolver: yupResolver(schema),
+    })
     const dispatch = useDispatch()
+    const userErrorMessage = useErrorMessage();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
-    const [errors, setErrors] = useState({});
-    const [isSubmit, setIsSubmit] = useState(false)
-
-    const onPasswordChangeHandler = (e) => {
-        if (Object.keys(errors).length > 0) {
-            setErrors({})
-            setIsSubmit(true)
-        }
-        setPassword(e.target.value)
-    };
-    const onUsernameChangeHandler = (e) => {
-        if (Object.keys(errors).length > 0) {
-            setErrors({})
-            setIsSubmit(true)
-        }
-        setUsername(e.target.value)
-    };
-
-    const onRepeatPasswordChangeHandler = (e) => {
-        if (Object.keys(errors).length > 0) {
-            setErrors({})
-            setIsSubmit(true)
-        }
-        setRepeatPassword(e.target.value)
-    };
-    const onSubmit = (e) => {
+    const onSubmit = async (data, e) => {
         e.preventDefault()
-        validateFields()
-        if (Object.keys(errors).length === 0) {
-            setIsSubmit(false)
-            dispatch(getUser(username,password));
-            setIsSubmit(true)
-        }
-    }
-
-    const validateFields = (name) => {
-        let newErrors = {...errors};
-
-        if (username === '' && name === 'username') {
-            setIsSubmit(false);
-            newErrors = {...newErrors, username: 'Not Empty'}
-            setErrors({...newErrors})
-        }
-
-        if (password.length < 5 && name === 'password') {
-            setIsSubmit(false);
-            newErrors = {...newErrors, password: 'Required! Must be 5 characters or more'}
-            setErrors({...newErrors})
-        }
-
-        if (repeatPassword !== password && name === 'repeatPassword') {
-            setIsSubmit(false);
-            newErrors = {...newErrors, repeatPassword: 'Repeat password is not equal to password'}
-            setErrors({...newErrors})
-        }
-
-        if (Object.keys(newErrors).length === 0 && name === 'repeatPassword') {
-            setIsSubmit(true);
-        }
-    }
-
-
-    const onBlurHandler = (e) => {
-        validateFields(e.target.name)
-    }
+        await dispatch(getUser(data.username, data.password))
+    };
 
     return (
         <div className="form-login-container">
-            <form className="form-login">
+            <form className="form-login" onSubmit={handleSubmit(onSubmit)}>
                 <h1 className="h3 mb-3 font-weight-normal text-center">
                     Авторизация
                 </h1>
                 <div className="form-group">
                     <label htmlFor="username">Пользователь</label>
                     <input
-                        type="text"
                         className={classNames('form-control', {
                             'is-invalid': errors.username
                         })}
+                        type="text"
                         id="username"
                         placeholder="Пользователь"
                         name="username"
-                        value={username}
-                        onChange={onUsernameChangeHandler}
-                        onBlur={onBlurHandler}
+                        ref={register}
                     />
-                    {errors.username && (
-                        <div className="invalid-feedback">{errors.username}</div>
-                    )}
                 </div>
+                {errors.username && (
+                    <div className="invalid-feedback">{errors.username.message}</div>
+                )}
                 <div className="form-group">
                     <label htmlFor="password">Пароль</label>
                     <input
-                        type="password"
                         className={classNames('form-control', {
                             'is-invalid': errors.password
                         })}
+                        type="password"
                         id="password"
                         placeholder="Пароль"
                         name="password"
-                        value={password}
-                        onChange={onPasswordChangeHandler}
-                        onBlur={onBlurHandler}
+                        ref={register}
                     />
-                    {errors.password && (
-                        <div className="invalid-feedback">{errors.password}</div>
-                    )}
                 </div>
+                {errors.password && (
+                    <div className="invalid-feedback">{errors.password.message}</div>
+                )}
                 <div className="form-group">
                     <label htmlFor="repeat-password">Повторите пароль</label>
                     <input
-                        type="password"
                         className={classNames('form-control', {
                             'is-invalid': errors.repeatPassword
                         })}
+                        type="password"
                         id="repeat-password"
                         placeholder="Пароль"
                         name="repeatPassword"
-                        value={repeatPassword}
-                        onChange={onRepeatPasswordChangeHandler}
-                        onBlur={onBlurHandler}
+                        ref={register}
                     />
-                    {errors.repeatPassword && (
-                        <div className="invalid-feedback">{errors.repeatPassword}</div>
-                    )}
                 </div>
+                {errors.repeatPassword && (
+                    <div className="invalid-feedback">{errors.repeatPassword.message}</div>
+                )}
                 <button
                     type="submit"
                     className="btn btn-lg btn-primary btn-block"
-                    onClick={onSubmit}
-                    disabled={!isSubmit}
+                    disabled={isSubmitting || !isDirty || !isValid}
                 >
                     Вход
                 </button>
-                {errors.base && (
-                    <div className="invalid-feedback">{errors.base}</div>
+                {userErrorMessage && (
+                    <div className="invalid-feedback">{userErrorMessage}</div>
                 )}
             </form>
         </div>

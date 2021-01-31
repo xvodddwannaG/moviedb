@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CallApi from "../../api/api_v2";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 import {Nav, NavItem} from "reactstrap";
 import {NavLink, Route,} from "react-router-dom";
 import Details from "../../components/Details";
@@ -17,7 +17,8 @@ const MoviePage = () => {
     const imagePathBackground = movieData.backdrop_path
 
     useEffect(() => {
-        CallApi.get(`/movie/${id}`, {params: {language: 'ru-RU'}}).then((res) => setMovieData(res))
+        CallApi.get(`/movie/${id}`, {params: {language: 'ru-RU'}})
+            .then((res) => setMovieData(res))
     }, [])
 
     return (
