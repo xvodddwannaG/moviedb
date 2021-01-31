@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {API_KEY_3, API_URL} from "../../api/api";
+import CallApi from "../../api/api_v2";
 
 const Genres = ({onChangeSelectorHandler, name, filters: {with_genres}}) => {
     const [genresList, setGenresList] = useState([])
 
     useEffect(() => {
-        const link = `${API_URL}/genre/movie/list?api_key=${API_KEY_3}&language=ru-RU`
-        fetch(link)
-            .then((res) => res.json())
-            .then((data) => {
-                setGenresList(data.genres)
-            })
+        CallApi.get('/genre/movie/list', {params: {language: 'ru-RU'}})
+            .then((res) => setGenresList(res.genres));
     }, [])
 
 

@@ -45,7 +45,6 @@ export default class CallApi {
             ...params
         };
 
-        console.log(body)
         return fetchApi(`${API_URL}${endpoint}?${queryString.stringify(queryStringParams)}`,
             {
                 method: "DELETE",

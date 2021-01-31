@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {TabContent} from "reactstrap";
 import CallApi from "../../api/api_v2";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 
 const Videos = () => {
     const [videos, setVideos] = useState([]);
@@ -10,8 +10,6 @@ const Videos = () => {
     useEffect(() => {
         CallApi.get(`/movie/${id}/videos`).then((res) => setVideos(res.results));
     }, [])
-
-    console.log(videos.length !== 0)
 
     return (
         <TabContent>
