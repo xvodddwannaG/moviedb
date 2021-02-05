@@ -3,14 +3,14 @@ import Header from "./components/Header";
 import MoviesPage from "./pages/MoviesPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import MoviePage from "./pages/MoviePage";
-import { getCookies } from "./redux/applyMiddleware";
 import { useDispatch } from "react-redux";
+import { getUserInitialData } from "./redux/actionCreators";
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCookies());
+    dispatch(getUserInitialData());
   }, [dispatch]);
 
   return (

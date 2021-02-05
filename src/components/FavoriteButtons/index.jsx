@@ -7,8 +7,11 @@ import {
   useWatchList,
 } from "../../redux/selectors";
 import { useDispatch } from "react-redux";
-import { setModalShow } from "../../redux/actionCreators";
-import { updateFavorite, updateWatchList } from "../../redux/applyMiddleware";
+import {
+  setModalShow,
+  setNewFavorite,
+  setNewWatchlist,
+} from "../../redux/actionCreators";
 
 const FavoriteButtons = ({ id }) => {
   const dispatch = useDispatch();
@@ -23,7 +26,14 @@ const FavoriteButtons = ({ id }) => {
     if (!session_id) {
       dispatch(setModalShow());
     } else {
-      dispatch(updateFavorite(userData.id, session_id, id, isFavorite));
+      dispatch(
+        setNewFavorite({
+          account_id: userData.id,
+          session_id,
+          movie_id: id,
+          isFavorite,
+        })
+      );
     }
   };
 
@@ -31,7 +41,14 @@ const FavoriteButtons = ({ id }) => {
     if (!session_id) {
       dispatch(setModalShow());
     } else {
-      dispatch(updateWatchList(userData.id, session_id, id, isWatchList));
+      dispatch(
+        setNewWatchlist({
+          account_id: userData.id,
+          session_id,
+          movie_id: id,
+          isWatchList,
+        })
+      );
     }
   };
 

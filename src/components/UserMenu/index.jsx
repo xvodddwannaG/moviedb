@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 import { useSessionId, useUserData } from "../../redux/selectors";
 import { useDispatch } from "react-redux";
-import { userLogout } from "../../redux/applyMiddleware";
+import { setLogout } from "../../redux/actionCreators";
 
 const UserMenu = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,7 +16,7 @@ const UserMenu = () => {
   const dispatch = useDispatch();
 
   const toggleHandler = () => setIsDropdownOpen(!isDropdownOpen);
-  const logoutHandler = () => dispatch(userLogout(sessionId));
+  const logoutHandler = () => dispatch(setLogout(sessionId));
 
   return (
     <Dropdown nav isOpen={isDropdownOpen} toggle={toggleHandler}>
