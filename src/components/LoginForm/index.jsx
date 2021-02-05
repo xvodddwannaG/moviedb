@@ -1,11 +1,11 @@
 import React from "react";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
-import { getUser } from "../../redux/applyMiddleware";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useErrorMessage } from "../../redux/selectors";
+import { useErrorMessage, useUserIsLoading } from "../../redux/selectors";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { setUserAuth } from "../../redux/actionCreators";
 
 const schema = yup.object().shape({
   username: yup.string().required().min(5),
@@ -21,17 +21,19 @@ const LoginForm = () => {
     register,
     handleSubmit,
     errors,
-    formState: { isDirty, isValid, isSubmitting },
+    setError,
+    formState: { isDirty, isValid },
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
   const userErrorMessage = useErrorMessage();
+  const userIsLoading = useUserIsLoading();
 
-  const onSubmit = async (data, e) => {
+  const onSubmit = (data, e) => {
     e.preventDefault();
-    await dispatch(getUser(data.username, data.password));
+    dispatch(setUserAuth({ username: data.username, password: data.password }));
   };
 
   return (
@@ -91,7 +93,7 @@ const LoginForm = () => {
         <button
           type="submit"
           className="btn btn-lg btn-primary btn-block"
-          disabled={isSubmitting || !isDirty || !isValid}
+          disabled={userIsLoading || userErrorMessage || !isDirty || !isValid}
         >
           Вход
         </button>
