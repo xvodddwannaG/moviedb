@@ -21,7 +21,6 @@ const LoginForm = () => {
     register,
     handleSubmit,
     errors,
-    setError,
     formState: { isDirty, isValid },
   } = useForm({
     mode: "onBlur",

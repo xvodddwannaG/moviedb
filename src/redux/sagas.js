@@ -11,10 +11,12 @@ import {
   setModalClose,
   setUpdateFavorite,
   setUpdateFavoriteError,
+  setUpdateFavoriteStarting,
   setUpdateUserError,
   setUpdateUserStarting,
   setUpdateWatchList,
   setUpdateWatchListError,
+  setUpdateWatchListStarting,
   setUserData,
 } from "./actionCreators";
 import Cookies from "universal-cookie";
@@ -72,32 +74,42 @@ function* userLogout(action) {
 
 function* getCookies(action) {
   const session_id = cookies.get("session_id");
-  if (session_id) {
-    const result = yield call(CallApi.get, "/account", {
-      params: { session_id },
-    });
-    const [watchList, favoriteList] = yield all([
-      call(CallApi.get, `/account/${result.id}/watchlist/movies`, {
-        params: { session_id: session_id },
-      }),
-      call(CallApi.get, `/account/${result.id}/favorite/movies`, {
-        params: { session_id: session_id },
-      }),
-    ]);
+  try {
+    if (session_id) {
+      yield put(setUpdateUserStarting());
+      const result = yield call(CallApi.get, "/account", {
+        params: { session_id },
+      });
+      yield put(setUpdateFavoriteStarting());
+      yield put(setUpdateWatchListStarting());
+      const [watchList, favoriteList] = yield all([
+        call(CallApi.get, `/account/${result.id}/watchlist/movies`, {
+          params: { session_id: session_id },
+        }),
+        call(CallApi.get, `/account/${result.id}/favorite/movies`, {
+          params: { session_id: session_id },
+        }),
+      ]);
 
-    yield put(setUpdateFavorite(favoriteList.results));
-    yield put(setUpdateWatchList(watchList.results));
+      yield put(setUpdateFavorite(favoriteList.results));
+      yield put(setUpdateWatchList(watchList.results));
 
-    yield put(
-      setUserData({
-        user: result,
-        session_id,
-      })
-    );
+      yield put(
+        setUserData({
+          user: result,
+          session_id,
+        })
+      );
+    }
+  } catch (error) {
+    yield put(setUpdateUserError(error));
+    yield put(setUpdateFavoriteError(error));
+    yield put(setUpdateWatchListError());
   }
 }
 
 function* updateFavorite(action) {
+  yield put(setUpdateFavoriteStarting());
   try {
     yield call(CallApi.post, `/account/${action.payload.account_id}/favorite`, {
       params: { session_id: action.payload.session_id },
@@ -119,6 +131,7 @@ function* updateFavorite(action) {
 }
 
 function* updateWatchlist(action) {
+  yield put(setUpdateWatchListStarting());
   try {
     yield call(
       CallApi.post,
