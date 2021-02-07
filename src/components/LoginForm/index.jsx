@@ -25,6 +25,11 @@ const LoginForm = () => {
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
+    defaultValues: {
+      username: "xvoddd",
+      password: "test12345",
+      repeatPassword: "test12345",
+    },
   });
   const dispatch = useDispatch();
   const userErrorMessage = useErrorMessage();
@@ -92,7 +97,7 @@ const LoginForm = () => {
         <button
           type="submit"
           className="btn btn-lg btn-primary btn-block"
-          disabled={userIsLoading || userErrorMessage || !isDirty || !isValid}
+          disabled={userIsLoading || userErrorMessage || !isValid}
         >
           Вход
         </button>
