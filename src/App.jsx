@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import Header from "./components/Header";
 import MoviesPage from "./pages/MoviesPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import MoviePage from "./pages/MoviePage";
 import { useDispatch } from "react-redux";
 import { getUserInitialData } from "./redux/actionCreators";
+import { ClipLoader } from "react-spinners";
+
+const MoviePage = React.lazy(() => import("./pages/MoviePage"));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -17,9 +19,11 @@ const App = () => {
     <BrowserRouter>
       <Header />
       <Route path="/" exact component={MoviesPage} />
-      <Switch>
-        <Route path="/movie/:id" component={MoviePage} />
-      </Switch>
+      <Suspense fallback={<ClipLoader />}>
+        <Switch>
+          <Route path="/movie/:id" component={MoviePage} />
+        </Switch>
+      </Suspense>
     </BrowserRouter>
   );
 };

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import CallApi from "../../api/api_v2";
 import { useParams } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 import { NavLink, Route } from "react-router-dom";
-import Details from "../../components/Details";
-import Videos from "../../components/Videos";
-import Credits from "../../components/Credits";
+import { ClipLoader } from "react-spinners";
+
+const Details = React.lazy(() => import("../../components/Details"));
+const Videos = React.lazy(() => import("../../components/Videos"));
+const Credits = React.lazy(() => import("../../components/Credits"));
 
 const MoviePage = () => {
   const [movieData, setMovieData] = useState({});
-
   const { id } = useParams();
 
   const imagePathPoster = movieData.poster_path;
@@ -84,11 +85,13 @@ const MoviePage = () => {
                   </NavLink>
                 </NavItem>
               </Nav>
-              <Route path="/movie/:id/details">
-                <Details movieData={movieData} />
-              </Route>
-              <Route path="/movie/:id/videos" component={Videos} />
-              <Route path="/movie/:id/credits" component={Credits} />
+              <Suspense fallback={<ClipLoader />}>
+                <Route path="/movie/:id/details">
+                  <Details movieData={movieData} />
+                </Route>
+                <Route path="/movie/:id/videos" component={Videos} />
+                <Route path="/movie/:id/credits" component={Credits} />
+              </Suspense>
             </div>
           </div>
         </div>
