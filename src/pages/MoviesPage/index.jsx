@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { API_KEY_3 } from "../../api/api";
 import Filters from "../../components/Filters";
-import MovieList from "../../components/MovieList";
 import { useData } from "../../api/useData";
+import { ClipLoader } from "react-spinners";
+
+const MovieList = React.lazy(() => import("../../components/MovieList"));
 
 const initialFiltersState = {
   sort_by: "popularity.desc",
@@ -59,7 +61,9 @@ const MoviesPage = () => {
           </div>
         </div>
         <div className="col-9">
-          <MovieList moviesData={data} isLoading={isLoading} />
+          <Suspense fallback={<ClipLoader />}>
+            <MovieList moviesData={data} isLoading={isLoading} />
+          </Suspense>
         </div>
       </div>
     </div>

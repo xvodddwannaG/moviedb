@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API_URL } from "./api";
 import * as queryString from "querystring";
 
@@ -14,7 +14,6 @@ export const useData = (query) => {
       setIsLoading(true);
       try {
         const result = await fetch(link).then((res) => res.json());
-
         setData(result);
       } catch (e) {
         setIsError(true);

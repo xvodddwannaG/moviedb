@@ -6,6 +6,7 @@ import { useErrorMessage, useUserIsLoading } from "../../redux/selectors";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { setUserAuth } from "../../redux/actionCreators";
+import { ClipLoader } from "react-spinners";
 
 const schema = yup.object().shape({
   username: yup.string().required().min(5),
@@ -21,7 +22,7 @@ const LoginForm = () => {
     register,
     handleSubmit,
     errors,
-    formState: { isDirty, isValid },
+    formState: { isValid },
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -99,7 +100,7 @@ const LoginForm = () => {
           className="btn btn-lg btn-primary btn-block"
           disabled={userIsLoading || userErrorMessage || !isValid}
         >
-          Вход
+          {userIsLoading ? <ClipLoader /> : "Вход"}
         </button>
         {userErrorMessage && (
           <div className="invalid-feedback">{userErrorMessage}</div>
